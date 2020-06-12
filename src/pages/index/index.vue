@@ -1,126 +1,74 @@
 <template>
-  <div @click="clickHandle">
-
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <img class="userinfo-avatar" src="/static/images/user.png" background-size="cover" />
-
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
-      </div>
-    </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" :value="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
-
-    <div class="all">
-        <div class="left">
-        </div>
-        <div class="right">
-        </div>
-    </div>
+  <div>
+    <nav-bar :showIcon="true"></nav-bar>
+    <map
+      id="myMap"
+      style="width: 100%;"
+      :latitude="latitude"
+      :longitude="longitude"
+      :markers="markers"
+      show-location
+    ></map>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
-
+import NavBar from '@/components/navbar'
+import location from '../../../static/images/location.png'
 export default {
   data () {
     return {
-      motto: 'Hello miniprograme',
-      userInfo: {
-        nickName: 'mpvue',
-        avatarUrl: 'http://mpvue.com/assets/logo.png'
-      }
+      latitude: 23.099994,
+      longitude: 113.324520
     }
   },
-
+  computed: {
+    markers() {
+      return [{
+        id: 1,
+        latitude: this.latitude,
+        longitude: this.longitude,
+        iconPath: location,
+        width: 25,
+        height: 49,
+        name: 'T.I.T 创意园'
+      }]
+    }
+  },
   components: {
-    card
+    NavBar
   },
 
   methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      if (mpvuePlatform === 'wx') {
-        mpvue.switchTab({ url })
-      } else {
-        mpvue.navigateTo({ url })
-      }
+    regionchange (e) {
+      console.log(e.type)
     },
-    clickHandle (ev) {
-      console.log('clickHandle:', ev)
-      // throw {message: 'custom test'}
+    markertap (e) {
+      console.log(e.detail.markerId)
+    },
+    controltap (e) {
+      console.log(e.detail.controlId)
+    },
+    getLocation () {
+      const _this = this
+      wx.getLocation({
+        type: 'wgs84',
+        success (res) {
+          _this.latitude = res.latitude
+          _this.longitude = res.longitude
+        }
+      })
     }
   },
-
   created () {
+    this.getLocation()
     // let app = getApp()
   }
 }
 </script>
 
-<style scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-.all{
-  width:7.5rem;
-  height:1rem;
-  background-color:blue;
-}
-.all:after{
-  display:block;
-  content:'';
-  clear:both;
-}
-.left{
-  float:left;
-  width:3rem;
-  height:1rem;
-  background-color:red;
-}
-
-.right{
-  float:left;
-  width:4.5rem;
-  height:1rem;
-  background-color:green;
+<style scoped lang="css">
+#myMap {
+  height: 100vh;
 }
 </style>
