@@ -2,12 +2,24 @@
   <div class="navbar" :style="{height: globalData.navHeight + 'px'}" :class="{'shadow': !showIcon}">
     <div class="navbar-action-wrap" :style="{top: globalData.navTop + 'px'}" v-if="showIcon">
       <span class="icon-company"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+      <!-- <div class="selected" @click="clickPopup">
+        <span class="title">{{active}}</span>
+        <span class="icon-up icon"></span>
+      </div> -->
+      <div class="selected">
+        <van-dropdown-menu active-color="#09BA85">
+          <van-dropdown-item :value="active" :options="companyList" />
+        </van-dropdown-menu>
+      </div>
     </div>
-    <div class='navbar-title' :class="{'textLeft': showIcon}" :style="{top: globalData.navTop + 'px'}">
-      <span v-if="showIcon">
-      </span>
+    <div class='navbar-title' :style="{top: globalData.navTop + 'px'}" v-if="!showIcon">
       <span>{{title}}</span>
     </div>
+    <van-popup :show="showPopup" round position="bottom" custom-style="height: 20%" bind:close="hideRound">
+      <ul>
+        <li v-for="item in companyList" :key="item">{{item}}</li>
+      </ul>
+    </van-popup>
   </div>
 </template>
 
@@ -29,11 +41,18 @@ export default {
       globalData: {
         navHeight: 0,
         navTop: 0,
-        windowHeight: 0,
-        active: '双意租车',
-        index: 0,
-        companyList: ['双意租车', '其他租车']
-      }
+        windowHeight: 0
+      },
+      active: 0,
+      companyList: [
+        { text: '双意租车', value: 0 },
+        { text: '其他租车1', value: 1 },
+        { text: '双意租车2', value: 2 },
+        { text: '双意租车3', value: 3 },
+        { text: '双意租车4', value: 4 },
+        { text: '双意租车5', value: 5 }
+      ],
+      showPopup: false
     }
   },
   mounted () {
@@ -58,6 +77,10 @@ export default {
       })
     },
     // 选择公司
+    clickPopup() {
+      console.log(123)
+      this.showPopup = true
+    }
   }
 }
 </script>
@@ -101,10 +124,33 @@ export default {
 
 .navbar-action-wrap {
   position: absolute;
+  height: 32px;
+  line-height: 32px;
+  display: flex
+  align-items: center
   left: 10px;
   z-index: 11;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  vertical-align: top;
+  .icon-company {
+    position: absolute;
+    top: 9px;
+  }
+}
+.selected {
+  position relative;
+  margin-left: 5px;
+  padding-left: 20px;
+  .title {
+    font-size: 16px;
+    padding-right: 20px;
+    font-size: 14px;
+  }
+  .icon {
+    position: absolute
+    top: 10px
+    right: 0
+  }
+
 }
 
 </style>
