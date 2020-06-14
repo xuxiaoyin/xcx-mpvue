@@ -13,34 +13,9 @@
       <span class="icon-user"></span>
     </van-button>
     <van-tabs animated class="btome-tab">
-      <van-tab title="日租" class="dayUser">
-        <van-cell @click="showPopup">
-          <view slot="title">
-            <span class="icon-time icon"></span>
-            <span class="van-cell-text" :class="{'gray': !currentDate}">
-              {{currentDate ? currentDate : '请选择用车时间'}}
-            </span>
-          </view>
-        </van-cell>
-        <van-cell>
-          <view slot="title">
-            <span class="icon-origin icon"></span>
-            <span class="van-cell-text">
-              {{companypalce}}
-            </span>
-          </view>
-        </van-cell>
-        <van-cell>
-          <view slot="title">
-            <span class="icon-last icon"></span>
-            <span class="van-cell-text gray">
-              请选择目的地
-            </span>
-          </view>
-        </van-cell>
+      <van-tab :title="item.title" :class="item.class" v-for="(item, index) in styleFormList" :key="index">
+        <style-form :info="item"></style-form>
       </van-tab>
-      <van-tab title="自驾">内容 2</van-tab>
-      <van-tab title="单接/送">内容 3</van-tab>
     </van-tabs>
     <map
       id="myMap"
@@ -50,38 +25,61 @@
       :markers="markers"
       show-location
     ></map>
-    <van-popup :show="show" position="bottom" @close="close">
-      <van-datetime-picker
-        type="datetime"
-        :value="oldDate"
-        :min-date="minDate"
-        :max-date="maxDate"
-        title="选择用车时间"
-        @confirm="confirmTime"
-        @cancel="close"
-      />
-    </van-popup>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/navbar'
 import location from '../../../static/images/location.png'
+import StyleForm from './components/styleForm'
 export default {
+  components: {
+    StyleForm
+  },
   data () {
     return {
       latitude: 23.099994,
       longitude: 113.32452,
       seatList: ['5座', '7座', '9-12座', '15-18座', '20-29座', '33-45座'],
       window: {},
-      minHour: 10,
-      maxHour: 20,
-      minDate: new Date().getTime(),
-      maxDate: new Date(2090, 10, 1).getTime(),
-      currentDate: '',
-      oldDate: '',
-      show: false,
-      companypalce: '广州南站'
+      styleFormList: [
+        {
+          title: '日租',
+          class: 'dayUser',
+          files: {
+            minHour: 10,
+            maxHour: 20,
+            minDate: new Date().getTime(),
+            maxDate: new Date(2090, 10, 1).getTime(),
+            oldDate: '',
+            companypalce: '广州南站',
+          }
+        },
+        {
+          title: '自驾',
+          class: 'selfUser',
+          files: {
+            minHour: 10,
+            maxHour: 20,
+            minDate: new Date().getTime(),
+            maxDate: new Date(2090, 10, 1).getTime(),
+            oldDate: '',
+            companypalce: '广州南站',
+          }
+        },
+        {
+          title: '单接/送',
+          class: 'sendUser',
+          files: {
+            minHour: 10,
+            maxHour: 20,
+            minDate: new Date().getTime(),
+            maxDate: new Date(2090, 10, 1).getTime(),
+            oldDate: '',
+            companypalce: '广州南站',
+          }
+        }
+      ]
     }
   },
   computed: {
@@ -120,18 +118,6 @@ export default {
           _this.longitude = res.longitude
         }
       })
-    },
-    // 点击开始时间
-    showPopup() {
-      console.log(123)
-      this.show = true
-    },
-    close() {
-      this.show = false
-    },
-    confirmTime(value) {
-      this.currentDate = new Date(value.mp.detail).format("yyyy-MM-dd hh:mm:ss")
-      this.close()
     }
   },
   created () {
@@ -149,6 +135,7 @@ export default {
 
 <style lang="stylus">
 .home
+  position relative
   .seatList
     box-shadow 0px 2px 10px 0px rgba(0, 0, 0, 0.1)
     overflow auto

@@ -2,14 +2,11 @@
   <div class="navbar" :style="{height: globalData.navHeight + 'px'}" :class="{'shadow': !showIcon}">
     <div class="navbar-action-wrap" :style="{top: globalData.navTop + 'px'}" v-if="showIcon">
       <span class="icon-company"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
-      <!-- <div class="selected" @click="clickPopup">
-        <span class="title">{{active}}</span>
-        <span class="icon-up icon"></span>
-      </div> -->
       <div class="selected">
         <van-dropdown-menu active-color="#09BA85">
           <van-dropdown-item :value="active" :options="companyList" />
         </van-dropdown-menu>
+        <span class="icon-up"></span>
       </div>
     </div>
     <div class='navbar-title' :style="{top: globalData.navTop + 'px'}" v-if="!showIcon">
@@ -139,16 +136,12 @@ export default {
 .selected {
   position relative;
   margin-left: 5px;
-  padding-left: 20px;
-  .title {
-    font-size: 16px;
-    padding-right: 20px;
-    font-size: 14px;
-  }
-  .icon {
+  padding-left: 16px;
+  .icon-up {
+    background: #fff
     position: absolute
-    top: 10px
-    right: 0
+    top: 20px
+    right: -8px
   }
 
 }
