@@ -1,15 +1,15 @@
 <template>
-  <div class="navbar" :style="{height: globalData.navHeight + 'px'}" :class="{'shadow': !showIcon}">
+  <div class="navbar" :style="{height: globalData.navHeight + 'px'}" :class="{'shadow': shadow}">
     <div class="navbar-action-wrap" :style="{top: globalData.navTop + 'px'}" v-if="showIcon">
       <span class="icon-company"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
       <div class="selected">
         <van-dropdown-menu active-color="#09BA85">
           <van-dropdown-item :value="active" :options="companyList" />
         </van-dropdown-menu>
-        <span class="icon-up"></span>
       </div>
     </div>
     <div class='navbar-title' :style="{top: globalData.navTop + 'px'}" v-if="!showIcon">
+      <van-icon name="arrow-left" @click="back"></van-icon>
       <span>{{title}}</span>
     </div>
     <van-popup :show="showPopup" round position="bottom" custom-style="height: 20%" bind:close="hideRound">
@@ -31,6 +31,10 @@ export default {
     title: {
       type: String,
       default: '双意租车'
+    },
+    shadow: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -69,6 +73,8 @@ export default {
           this.globalData.navHeight = navHeight
           this.globalData.navTop = navTop
           console.log(this.globalData.navTop)
+          console.log(this.globalData.navHeight)
+          console.log(666)
           this.globalData.windowHeight = res.windowHeight
         }
       })
@@ -77,13 +83,17 @@ export default {
     clickPopup() {
       console.log(123)
       this.showPopup = true
+    },
+    // 返回
+    back() {
+      mpvue.navigateBack()
     }
   }
 }
 </script>
 
 <style lang="stylus">
-  .navbar {
+.navbar {
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -91,12 +101,14 @@ export default {
   left: 0;
   z-index: 10;
   flex-shrink: 0;
+  background: #fff;
 }
 .shadow {
   box-shadow: 0px 1rpx 5rpx 0px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-title {
+  position: relative;
   width: 100%;
   box-sizing: border-box;
   padding-left: 115px;
@@ -108,10 +120,19 @@ export default {
   left: 0;
   z-index: 10;
   color: #333;
-  font-size: 14px;
+  font-size: 18px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  .van-icon-arrow-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 10px;
+    font-size: 20px;
+  }
 }
 
 .textLeft {
@@ -137,11 +158,10 @@ export default {
   position relative;
   margin-left: 5px;
   padding-left: 16px;
-  .icon-up {
-    background: #fff
+  .icon {
     position: absolute
-    top: 20px
-    right: -8px
+    top: 10px
+    right: 0
   }
 
 }

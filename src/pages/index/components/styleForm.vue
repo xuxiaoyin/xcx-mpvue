@@ -1,6 +1,11 @@
 <template>
-  <div class="styleForm" @click="ceshi">
-    {{info}}
+  <div class="styleForm">
+    <van-cell v-if="info.title === '自驾'">
+      <van-radio-group :value="radio" @change="onChange">
+        <van-radio name="1" checked-color="#1BBE8D" icon-size="14px">送车上门</van-radio>
+        <van-radio name="2" checked-color="#1BBE8D" icon-size="14px">自提</van-radio>
+      </van-radio-group>
+    </van-cell>
     <van-cell @click="showPopup">
       <view slot="title">
         <span class="icon-time icon"></span>
@@ -9,7 +14,7 @@
         </span>
       </view>
     </van-cell>
-    <van-cell @click=ceshi>
+    <van-cell v-if="isShow">
       <view slot="title">
         <span class="icon-origin icon"></span>
         <span class="van-cell-text">
@@ -17,26 +22,14 @@
         </span>
       </view>
     </van-cell>
-    <van-cell>
+    <van-cell v-if="isShow" @click="goSearch">
       <view slot="title">
         <span class="icon-last icon"></span>
         <span class="van-cell-text gray">
-          请选择目的地
+          {{info.files.placePlaceholder}}
         </span>
       </view>
     </van-cell>
-
-    <van-popup :show="show" position="bottom" @close="close">
-      <van-datetime-picker
-        type="datetime"
-        :value="info.files.oldDate"
-        :min-date="info.files.minDate"
-        :max-date="info.files.maxDate"
-        title="选择用车时间"
-        @confirm="confirmTime"
-        @cancel="close"
-      />
-    </van-popup>
   </div>
 </template>
 
@@ -45,32 +38,43 @@ export default {
   props: {
     info: Object
   },
-  data() {
-    return {
-      show: false,
-      currentDate: ''
+  computed: {
+    currentDate() {
+      return this.info.files.currentDate
+    },
+    radio() {
+      return this.info.files.radio ? this.info.files.radio : ''
+    },
+    isShow() {
+      let flag = true
+      if (this.info.files.radio && this.info.files.radio ==='2') {
+        flag = false
+      }
+      return flag
     }
   },
   methods: {
     // 点击开始时间
     showPopup() {
-      console.log(123)
-      this.show = true
+      this.$emit('showPopup', this.info.index)
     },
-    close() {
-      this.show = false
+    onChange(e) {
+      this.$emit('changeStyle', e.mp.detail, this.info.index)
     },
-    confirmTime(value) {
-      this.currentDate = new Date(value.mp.detail).format("yyyy-MM-dd hh:mm:ss")
-      this.close()
-    },
-    ceshi() {
-      console.log(this.info)
+    // 选择目的地
+    goSearch() {
+      mpvue.navigateTo({url: '../searchDestination/main'})
     }
   },
 }
 </script>
 
 <style lang="stylus">
-
+.styleForm
+  ._van-radio-group
+    display flex
+    justify-content space-between
+    align-items center
+    ._van-radio
+      flex 1
 </style>
