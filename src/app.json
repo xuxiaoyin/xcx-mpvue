@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/changeCity/main",
     "pages/index/main",
-    "pages/searchDestination/main",
     "pages/userInfo/main",
+    "pages/searchDestination/main",
     "pages/sureUseCar/main",
-    "pages/logs/main",
     "pages/counter/main"
   ],
   "window": {

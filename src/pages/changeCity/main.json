@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "van-index-anchor": "/static/vant/index-anchor/index",
+    "van-index-bar": "/static/vant/index-bar/index"
+   }
+}

@@ -72,9 +72,6 @@ export default {
           let navHeight = statusBarHeight + menuButtonObject.height + (menuButtonObject.top - statusBarHeight) * 2
           this.globalData.navHeight = navHeight
           this.globalData.navTop = navTop
-          console.log(this.globalData.navTop)
-          console.log(this.globalData.navHeight)
-          console.log(666)
           this.globalData.windowHeight = res.windowHeight
         }
       })
